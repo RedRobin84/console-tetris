@@ -3,23 +3,29 @@
 #include <chrono>
 #include <thread>
 #include <string>
-#include <list>
 #include <array>
+#include <compare>
+#include <algorithm>
+
+const int ROTATION_NUMBER = 4;
+const int PIECE_POINT_NUMBER = 4;
 
 struct Point 
 {
 	int x;
 	int y;
+
+	auto operator<=>(const Point&) const = default;
 };
 
 struct Rotation
 {
-	const std::list<Point> coordinates;
+	const std::array<Point, PIECE_POINT_NUMBER> coordinates;
 };
 
 struct Piece
 {
-	const std::array<Rotation, 4> rotations;
+	const std::array<Rotation, ROTATION_NUMBER> rotations;
 };
 
 const std::string play_field = 1 + R"(
@@ -46,10 +52,26 @@ const Point BOTTOM_LEFT_BORDER {MAX, MIN};
 const Point BOTTOM_RIGHT_BORDER {MAX, MAX}; 
 const Point TOP_CENTER {MIN, MAX / 2}; 
 
-const int ROWS {10};
-const int COLUMNS {10};
+const int ROWS {MAX};
+const int COLUMNS {MAX};
 
-Point current_piece_pos {TOP_CENTER.x, TOP_CENTER.y};
+const char* DEFAULT_CHAR = "O"; 
+
+const Piece L {
+	std::array<Rotation, ROTATION_NUMBER>{
+		std::array<Point, PIECE_POINT_NUMBER>{Point{1,1}, Point{2,1}, Point{3,1}, Point{3, 2}},
+		std::array<Point, PIECE_POINT_NUMBER>{Point{1,1}, Point{2,1}, Point{3,1}, Point{3, 2}},
+		std::array<Point, PIECE_POINT_NUMBER>{Point{1,1}, Point{2,1}, Point{3,1}, Point{3, 2}},
+		std::array<Point, PIECE_POINT_NUMBER>{Point{1,1}, Point{2,1}, Point{3,1}, Point{3, 2}},
+	}
+};
+
+Point current_piece_pos {TOP_CENTER};
+
+
+void draw_on_pos(const Point& point) {
+	mvprintw(point.x, point.y, DEFAULT_CHAR);
+}
 
 int main() {
     initscr();
@@ -60,11 +82,12 @@ int main() {
     curs_set(0);           // set the cursor to invisible
     std::string render_result {play_field};
     printw(render_result.c_str());
-    mvprintw(current_piece_pos.x, current_piece_pos.y, "O");
-    mvprintw(current_piece_pos.x+1, current_piece_pos.y, "O");
+    std::for_each(L.rotations[0].coordinates.begin(), L.rotations[0].coordinates.end(), draw_on_pos);
+    draw_on_pos(current_piece_pos);
     refresh();
     std::this_thread::sleep_for(std::chrono::milliseconds(3000)); 
     clear();
     endwin();
     return 0;
 }
+
