@@ -28,7 +28,7 @@ struct Piece
 	const std::array<Rotation, ROTATION_NUMBER> rotations;
 };
 
-const std::string play_field = 1 + R"(
+const std::string play_field = R"(
 XXXXXXXXXXXXXXXXXXXXXXXXX  
 X          X    Score   X
 X          X            X
@@ -80,7 +80,7 @@ int main() {
     keypad(stdscr, TRUE);  // allow arrow keys
     timeout(0);            // no blocking on getch()
     curs_set(0);           // set the cursor to invisible
-    std::string render_result {play_field};
+    std::string render_result {play_field.substr(1)};
     printw(render_result.c_str());
     std::for_each(L.rotations[0].coordinates.begin(), L.rotations[0].coordinates.end(), draw_on_pos);
     draw_on_pos(current_piece_pos);
