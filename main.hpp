@@ -12,9 +12,6 @@ struct Point
 	auto operator<=>(const Point&) const = default;
 };
 
-const int ROTATION_NUMBER = 4;
-const int PIECE_POINT_NUMBER = 4;
-
 struct Rotation
 {
 	const std::array<Point, PIECE_POINT_NUMBER> coordinates;
@@ -39,6 +36,9 @@ X          X            X
 X          X            X
 XXXXXXXXXXXXXXXXXXXXXXXXX
 )";
+
+const int ROTATION_NUMBER = 4;
+const int PIECE_POINT_NUMBER = 4;
 
 const int MIN = 1;
 const int MAX = 10;
