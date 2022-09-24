@@ -4,6 +4,9 @@
 #include <array>
 #include <compare>
 
+const int ROTATION_NUMBER = 4;
+const int PIECE_POINT_NUMBER = 4;
+
 struct Point 
 {
 	int x;
@@ -36,9 +39,6 @@ X          X            X
 X          X            X
 XXXXXXXXXXXXXXXXXXXXXXXXX
 )";
-
-const int ROTATION_NUMBER = 4;
-const int PIECE_POINT_NUMBER = 4;
 
 const int MIN = 1;
 const int MAX = 10;
