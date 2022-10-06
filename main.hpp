@@ -3,6 +3,7 @@
 #include <string>
 #include <array>
 #include <compare>
+#include <iterator>
 
 const int ROTATION_NUMBER = 4;
 const int PIECE_POINT_NUMBER = 4;
@@ -23,6 +24,16 @@ struct Rotation
 struct Piece
 {
 	const std::array<Rotation, ROTATION_NUMBER> rotations;
+	const Rotation* current_rotation = rotations.begin();
+
+	void nextRotation() {
+		auto next_element = std::next(current_rotation);
+		if (next_element == rotations.cend()) {
+			current_rotation = rotations.cbegin();
+			return;
+		}
+		current_rotation = next_element;
+	}
 };
 
 const std::string play_field = R"(
