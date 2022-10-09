@@ -34,6 +34,14 @@ struct Piece
 		}
 		current_rotation = next_element;
 	}
+
+	void previousRotation() {
+		if (current_rotation == rotations.cbegin()) {
+			current_rotation = &rotations.back();
+			return;
+		}
+		current_rotation = std::prev(current_rotation);
+	}
 };
 
 const std::string play_field = R"(

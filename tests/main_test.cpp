@@ -41,10 +41,32 @@ void when_calling_next_rotation_on_last_element_then_first_is_selected() {
 	printf("FAILED: Assertion failed.\n");
 }
 
+void when_calling_previous_rotation_on_first_element_then_last_is_selected() {
+	printf("when_calling_previous_rotation_on_first_element_then_last_is_selected(): ");
+	L.previousRotation();
+
+	if (L.current_rotation->coordinates[0].x == 0 && L.current_rotation->coordinates[0].y == 1) {
+		printf("PASSED.\n");
+		return;
+	}
+	printf("FAILED: Assertion failed.\n");
+}
+
+void piece_previous_rotation_successfully_set() {
+	printf("piece_previous_rotation_successfully_set: ");
+	L.previousRotation();
+	if (L.current_rotation->coordinates[0].x == 0 && L.current_rotation->coordinates[0].y == 0) {
+		printf("PASSED.\n");
+		return;
+	}
+	printf("FAILED: Assertion failed.\n");
+}
 
 int main() {
 	first_rotation_default_after_creation();
 	piece_next_rotation_successfully_set();
 	when_calling_next_rotation_on_last_element_then_first_is_selected();
+	when_calling_previous_rotation_on_first_element_then_last_is_selected();
+	piece_previous_rotation_successfully_set();
 	return 0;
 }
