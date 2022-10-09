@@ -1,4 +1,3 @@
-#include <ncurses.h>
 #include "../main.hpp"
 
 Piece L {
@@ -31,10 +30,21 @@ void piece_next_rotation_successfully_set() {
 	printf("FAILED: Assertion failed.\n");
 }
 
-//Add test for edge case - when calling nextRotation() on last element
+void when_calling_next_rotation_on_last_element_then_first_is_selected() {
+	printf("when_calling_next_rotation_on_last_element_then_first_is_selected: ");
+	L.nextRotation();
+
+	if (L.current_rotation->coordinates[0].x == 1 && L.current_rotation->coordinates[0].y == 0) {
+		printf("PASSED.\n");
+		return;
+	}
+	printf("FAILED: Assertion failed.\n");
+}
+
 
 int main() {
 	first_rotation_default_after_creation();
 	piece_next_rotation_successfully_set();
+	when_calling_next_rotation_on_last_element_then_first_is_selected();
 	return 0;
 }
