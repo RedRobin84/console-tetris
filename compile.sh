@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-clang++ -Wall -std=c++20 -o main main.cpp -lncurses
+clang++ -Wall -Wno-missing-braces -std=c++20 -o main main.cpp -lncurses
