@@ -72,3 +72,16 @@ const int ROWS {MAX};
 const int COLUMNS {MAX};
 
 const char* DEFAULT_CHAR = "O"; 
+
+class Position {
+	private: 
+		Point value;
+
+	public:
+		const int getX() const {
+			return value.x;
+		}
+		const int getY() const {
+			return value.y;
+		}
+};
