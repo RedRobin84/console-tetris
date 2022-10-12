@@ -11,7 +11,7 @@ Piece L {
 
 void first_rotation_default_after_creation() {
 	printf("first_rotation_default_after_creation: ");
-	if (L.current_rotation->coordinates[0].x == 1 && L.current_rotation->coordinates[0].y == 0) {
+	if (L.get_current_rotation().coordinates[0].x == 1 && L.get_current_rotation().coordinates[0].y == 0) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -20,10 +20,10 @@ void first_rotation_default_after_creation() {
 
 void piece_next_rotation_successfully_set() {
 	printf("piece_next_rotation_successfully_set: ");
-	L.nextRotation();
-	L.nextRotation();
-	L.nextRotation();
-	if (L.current_rotation->coordinates[0].x == 0 && L.current_rotation->coordinates[0].y == 1) {
+	L.current_rotation = L.next_rotation();
+	L.current_rotation = L.next_rotation();
+	L.current_rotation = L.next_rotation();
+	if (L.get_current_rotation().coordinates[0].x == 0 && L.get_current_rotation().coordinates[0].y == 1) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -32,9 +32,10 @@ void piece_next_rotation_successfully_set() {
 
 void when_calling_next_rotation_on_last_element_then_first_is_selected() {
 	printf("when_calling_next_rotation_on_last_element_then_first_is_selected: ");
-	L.nextRotation();
 
-	if (L.current_rotation->coordinates[0].x == 1 && L.current_rotation->coordinates[0].y == 0) {
+	L.current_rotation = L.next_rotation();
+
+	if (L.get_current_rotation().coordinates[0].x == 1 && L.get_current_rotation().coordinates[0].y == 0) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -43,9 +44,10 @@ void when_calling_next_rotation_on_last_element_then_first_is_selected() {
 
 void when_calling_previous_rotation_on_first_element_then_last_is_selected() {
 	printf("when_calling_previous_rotation_on_first_element_then_last_is_selected(): ");
-	L.previousRotation();
 
-	if (L.current_rotation->coordinates[0].x == 0 && L.current_rotation->coordinates[0].y == 1) {
+	L.current_rotation = L.previous_rotation();
+
+	if (L.get_current_rotation().coordinates[0].x == 0 && L.get_current_rotation().coordinates[0].y == 1) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -54,8 +56,10 @@ void when_calling_previous_rotation_on_first_element_then_last_is_selected() {
 
 void piece_previous_rotation_successfully_set() {
 	printf("piece_previous_rotation_successfully_set: ");
-	L.previousRotation();
-	if (L.current_rotation->coordinates[0].x == 0 && L.current_rotation->coordinates[0].y == 0) {
+
+	L.current_rotation = L.previous_rotation();
+
+	if (L.get_current_rotation().coordinates[0].x == 0 && L.get_current_rotation().coordinates[0].y == 0) {
 		printf("PASSED.\n");
 		return;
 	}

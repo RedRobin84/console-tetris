@@ -26,21 +26,23 @@ struct Piece
 	const std::array<Rotation, ROTATION_NUMBER> rotations;
 	const Rotation* current_rotation = rotations.begin();
 
-	void nextRotation() {
+	const Rotation* next_rotation() const {
 		auto next_element = std::next(current_rotation);
 		if (next_element == rotations.cend()) {
-			current_rotation = rotations.cbegin();
-			return;
+			return rotations.cbegin();
 		}
-		current_rotation = next_element;
+		return next_element;
 	}
 
-	void previousRotation() {
+	const Rotation* previous_rotation() const {
 		if (current_rotation == rotations.cbegin()) {
-			current_rotation = &rotations.back();
-			return;
+			return &rotations.back();
 		}
-		current_rotation = std::prev(current_rotation);
+		return std::prev(current_rotation);
+	}
+
+	const Rotation& get_current_rotation() {
+		return *current_rotation;
 	}
 };
 
@@ -78,10 +80,10 @@ class Position {
 		Point value;
 
 	public:
-		const int getX() const {
+		const int get_x() const {
 			return value.x;
 		}
-		const int getY() const {
+		const int get_y() const {
 			return value.y;
 		}
 };
