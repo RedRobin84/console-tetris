@@ -87,3 +87,5 @@ class Position {
 			return value.y;
 		}
 };
+
+bool collides(const Rotation& rotation, const Position& position, const std::string& area);

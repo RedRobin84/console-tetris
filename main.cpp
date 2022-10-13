@@ -21,6 +21,13 @@ void draw_on_pos(const Point& point) {
 	mvprintw(point.y, point.x, DEFAULT_CHAR);
 }
 
+bool collides(const Rotation& rotation, const Position& position, const std::string& area) {
+	return	std::any_of(rotation.coordinates.cbegin(), rotation.coordinates.cend(),
+			[&area, &position](const Point& p) {
+			return area[(p.x + position.get_x()) + (p.y * position.get_y())] != ' ';
+			});
+}
+
 int main() {
     initscr();
     cbreak();              // pass key presses to program, but not signals
@@ -48,7 +55,8 @@ int main() {
 	}
 
     	printw(render_result.c_str());
-	std::for_each(L.current_rotation->coordinates.cbegin(), L.current_rotation->coordinates.cend(), [&current_pos](const Point& p) {
+	std::for_each(L.current_rotation->coordinates.cbegin(), L.current_rotation->coordinates.cend(), 
+			[&current_pos](const Point& p) {
                         draw_on_pos({p.x + current_pos.x, p.y + current_pos.y});
                         });
     	refresh();
