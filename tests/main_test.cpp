@@ -1,17 +1,9 @@
 #include "../main.hpp"
 
-Piece L {
-	std::array<Rotation, ROTATION_NUMBER>{
-		std::array<Point, PIECE_POINT_NUMBER>{Point{1, 0}, Point{1, 1}, Point{1, 2}, Point{2, 2}},
-		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 2}, Point{0, 1}, Point{1, 1}, Point{2, 1}},
-		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 0}, Point{1, 0}, Point{1, 1}, Point{1, 2}},
-		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 1}, Point{1, 1}, Point{2, 1}, Point{2, 0}}
-	}
-};
-
 void first_rotation_default_after_creation() {
 	printf("first_rotation_default_after_creation: ");
-	if (L.get_current_rotation().coordinates[0].x == 1 && L.get_current_rotation().coordinates[0].y == 0) {
+	if (L.get_current_rotation().coordinates[0].x == 1 
+			&& L.get_current_rotation().coordinates[0].y == 0) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -23,7 +15,8 @@ void piece_next_rotation_successfully_set() {
 	L.current_rotation = L.next_rotation();
 	L.current_rotation = L.next_rotation();
 	L.current_rotation = L.next_rotation();
-	if (L.get_current_rotation().coordinates[0].x == 0 && L.get_current_rotation().coordinates[0].y == 1) {
+	if (L.get_current_rotation().coordinates[0].x == 0 
+			&& L.get_current_rotation().coordinates[0].y == 1) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -35,7 +28,8 @@ void when_calling_next_rotation_on_last_element_then_first_is_selected() {
 
 	L.current_rotation = L.next_rotation();
 
-	if (L.get_current_rotation().coordinates[0].x == 1 && L.get_current_rotation().coordinates[0].y == 0) {
+	if (L.get_current_rotation().coordinates[0].x == 1 
+			&& L.get_current_rotation().coordinates[0].y == 0) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -47,7 +41,8 @@ void when_calling_previous_rotation_on_first_element_then_last_is_selected() {
 
 	L.current_rotation = L.previous_rotation();
 
-	if (L.get_current_rotation().coordinates[0].x == 0 && L.get_current_rotation().coordinates[0].y == 1) {
+	if (L.get_current_rotation().coordinates[0].x == 0 
+			&& L.get_current_rotation().coordinates[0].y == 1) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -59,7 +54,19 @@ void piece_previous_rotation_successfully_set() {
 
 	L.current_rotation = L.previous_rotation();
 
-	if (L.get_current_rotation().coordinates[0].x == 0 && L.get_current_rotation().coordinates[0].y == 0) {
+	if (L.get_current_rotation().coordinates[0].x == 0 
+			&& L.get_current_rotation().coordinates[0].y == 0) {
+		printf("PASSED.\n");
+		return;
+	}
+	printf("FAILED: Assertion failed.\n");
+}
+
+void when_on_non_colliding_position_return_false() {
+	printf("when_on_non_colliding_position_return_false: \n");
+	Position position({5, 1});
+	const auto area = play_field.substr(1);
+	if (not collides(L.rotations[0], position, area)) {
 		printf("PASSED.\n");
 		return;
 	}
@@ -72,5 +79,6 @@ int main() {
 	when_calling_next_rotation_on_last_element_then_first_is_selected();
 	when_calling_previous_rotation_on_first_element_then_last_is_selected();
 	piece_previous_rotation_successfully_set();
+	when_on_non_colliding_position_return_false();
 	return 0;
 }

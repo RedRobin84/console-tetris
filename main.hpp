@@ -63,6 +63,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXX
 
 const int MIN = 1;
 const int MAX = 10;
+const int TOTAL_MAX = 25;
 
 const Point UPPER_LEFT_BORDER {MIN, MIN}; 
 const Point UPPER_RIGHT_BORDER {MAX, MIN}; 
@@ -86,6 +87,25 @@ class Position {
 		const int get_y() const {
 			return value.y;
 		}
+		Position(const Point& point) : value(point) {}
 };
 
-bool collides(const Rotation& rotation, const Position& position, const std::string& area);
+Piece L {
+	std::array<Rotation, ROTATION_NUMBER>{
+		std::array<Point, PIECE_POINT_NUMBER>{Point{1, 0}, Point{1, 1}, Point{1, 2}, Point{2, 2}},
+		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 2}, Point{0, 1}, Point{1, 1}, Point{2, 1}},
+		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 0}, Point{1, 0}, Point{1, 1}, Point{1, 2}},
+		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 1}, Point{1, 1}, Point{2, 1}, Point{2, 0}}
+	}
+};
+
+bool collides(const Rotation& rotation, const Position& position, const std::string& area) {
+	return std::any_of(rotation.coordinates.cbegin(), rotation.coordinates.cend(),
+			[&area, &position](const Point& p) {
+			const auto index = (p.x + position.get_x())
+			  + ((p.y + position.get_y()) * TOTAL_MAX); 
+			const char ch = area[index];
+			printf("collides: index: %d, char: %c\n", index, ch);
+			return ch != ' ';
+			});
+}
