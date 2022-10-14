@@ -63,7 +63,7 @@ void piece_previous_rotation_successfully_set() {
 }
 
 void when_on_non_colliding_position_return_false() {
-	printf("when_on_non_colliding_position_return_false: \n");
+	printf("when_on_non_colliding_position_return_false: ");
 	Position position({5, 1});
 	const auto area = play_field.substr(1);
 	if (not collides(L.rotations[0], position, area)) {
@@ -74,7 +74,7 @@ void when_on_non_colliding_position_return_false() {
 }
 
 void when_position_on_very_top_left_do_not_collide() {
-	printf("when_position_on_very_top_left_do_not_collide: \n");
+	printf("when_position_on_very_top_left_do_not_collide: ");
 	Position top_left({0, 1});
 	const auto area = play_field.substr(1);
 	if (not collides(L.rotations[0], top_left, area)) {
@@ -84,7 +84,19 @@ void when_position_on_very_top_left_do_not_collide() {
 	printf("FAILED: Assertion failed.\n");
 }
 
+void when_position_on_very_top_left_collide_with_colliding_rotation() {
+	printf("when_position_on_very_top_left_collide_with_colliding_rotation: ");
+	Position top_left({0, 1});
+	const auto area = play_field.substr(1);
+	if (collides(L.rotations[1], top_left, area)) {
+		printf("PASSED.\n");
+		return;
+	}
+	printf("FAILED: Assertion failed.\n");
+}
+
 int main() {
+	printf("*** MAIN TEST ***\n\n");
 	first_rotation_default_after_creation();
 	piece_next_rotation_successfully_set();
 	when_calling_next_rotation_on_last_element_then_first_is_selected();
@@ -92,5 +104,7 @@ int main() {
 	piece_previous_rotation_successfully_set();
 	when_on_non_colliding_position_return_false();
 	when_position_on_very_top_left_do_not_collide();
+	when_position_on_very_top_left_collide_with_colliding_rotation();
+	printf("\n");
 	return 0;
 }
