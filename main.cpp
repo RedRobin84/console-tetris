@@ -10,6 +10,14 @@ void draw_on_pos(const Point& point) {
 	mvprintw(point.y, point.x, DEFAULT_CHAR);
 }
 
+void render(const Piece& piece, const Position& pos) {
+    std::for_each(piece.current_rotation->coordinates.cbegin(),
+	piece.current_rotation->coordinates.cend(),
+	[&pos](const Point& p) {
+            draw_on_pos({p.x + pos.get_x(), p.y + pos.get_y()});
+        });
+}
+
 int main() {
     initscr();
     cbreak();              // pass key presses to program, but not signals
@@ -17,13 +25,17 @@ int main() {
     keypad(stdscr, TRUE);  // allow arrow keys
     timeout(0);            // no blocking on getch()
     curs_set(0);           // set the cursor to invisible
-    Point current_pos = starting_position;
+    Position current_pos {starting_position};
     bool running = true;
-    const auto render_result {play_field.substr(1)};
+    const auto area {play_field.substr(1)};
 
     while(running) {
+	printw(area.c_str());
+	render(L, current_pos);
+	refresh();
     	switch (getch()) {
     		case KEY_LEFT:
+			current_pos.move_left();
 			break;
 		case KEY_RIGHT:
 			break;
@@ -36,16 +48,9 @@ int main() {
 			continue;
 	}
 
-    	printw(render_result.c_str());
-	std::for_each(L.current_rotation->coordinates.cbegin(), L.current_rotation->coordinates.cend(), 
-			[&current_pos](const Point& p) {
-                        draw_on_pos({p.x + current_pos.x, p.y + current_pos.y});
-                        });
-    	refresh();
-    	std::this_thread::sleep_for(std::chrono::milliseconds(1000)); 
-   	clear();
-	current_pos.y++;
+	clear();
     }
+
     endwin();
     return 0;
 }

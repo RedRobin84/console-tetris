@@ -47,7 +47,7 @@ struct Piece
 };
 
 const std::string play_field = R"(
-XXXXXXXXXXXXXXXXXXXXXXXXX  
+XXXXXXXXXXXXXXXXXXXXXXXXX
 X          X    Score   X
 X          X            X
 X          X            X
@@ -61,33 +61,51 @@ X          X            X
 XXXXXXXXXXXXXXXXXXXXXXXXX
 )";
 
-const int MIN = 1;
+const int MIN_X = 0;
+const int MIN_Y = 1; // Skipping first row
 const int MAX = 10;
-const int TOTAL_MAX = 25;
+const int ROW_CHARS = 26; //25 + \n
 
-const Point UPPER_LEFT_BORDER {MIN, MIN}; 
-const Point UPPER_RIGHT_BORDER {MAX, MIN}; 
-const Point BOTTOM_LEFT_BORDER {MIN, MAX}; 
-const Point BOTTOM_RIGHT_BORDER {MAX, MAX}; 
-const Point TOP_CENTER {MAX / 2, MIN}; 
+const Point UPPER_LEFT_BORDER {MIN_X, MIN_Y};
+const Point UPPER_RIGHT_BORDER {MAX, MIN_Y};
+const Point BOTTOM_LEFT_BORDER {MIN_X, MAX};
+const Point BOTTOM_RIGHT_BORDER {MAX, MAX};
+const Point TOP_CENTER {MAX / 2, MIN_Y};
 
-const int ROWS {MAX};
-const int COLUMNS {MAX};
+const int ROW_NUMBER {MAX};
+const int COLUMN_NUMBER {MAX};
 
 const char* DEFAULT_CHAR = "O"; 
 
 class Position {
 	private: 
-		Point value;
+		Point value = {TOP_CENTER};
 
 	public:
+		Position() = default;
+		Position(const Point& point) : value(point) {}
+
 		const int get_x() const {
 			return value.x;
 		}
 		const int get_y() const {
 			return value.y;
 		}
-		Position(const Point& point) : value(point) {}
+		void move_left() {
+			if (value.x > 0) {
+				value.x -= 1;
+			}
+		}
+		void move_right() {
+			if (value.x < ROW_NUMBER) {
+				value.x += 1;
+			}
+		}
+		void move_down() {
+			if (value.y < COLUMN_NUMBER) {
+				value.y += 1;
+			}
+		}
 };
 
 Piece L {
@@ -103,9 +121,9 @@ bool collides(const Rotation& rotation, const Position& position, const std::str
 	return std::any_of(rotation.coordinates.cbegin(), rotation.coordinates.cend(),
 			[&area, &position](const Point& p) {
 			const auto index = (p.x + position.get_x())
-			  + ((p.y + position.get_y()) * TOTAL_MAX); 
+			  + ((p.y + position.get_y()) * ROW_CHARS);
 			const char ch = area[index];
-			printf("collides: index: %d, char: %c\n", index, ch);
+			//printf("collides: index: %d, char: %c\n", index, ch);
 			return ch != ' ';
 			});
 }
