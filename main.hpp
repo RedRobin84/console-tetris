@@ -91,6 +91,15 @@ class Position {
 		const int get_y() const {
 			return value.y;
 		}
+		const Point next_left() {
+			return {value.x - 1, value.y};
+		}
+		const Point next_right() {
+			return {value.x + 1, value.y};
+		}
+		const Point next_down() {
+			return {value.x, value.y + 1};
+		}	
 		void move_left() {
 			if (value.x > 0) {
 				value.x -= 1;
@@ -108,6 +117,17 @@ class Position {
 		}
 };
 
+bool collides(const Rotation& rotation, const Point& position, const std::string& area) {
+	return std::any_of(rotation.coordinates.cbegin(), rotation.coordinates.cend(),
+			[&area, &position](const Point& p) {
+			const auto index = (p.x + position.x)
+			  + ((p.y + position.y) * ROW_CHARS);
+			const char ch = area[index];
+			//printf("collides: index: %d, char: %c\n", index, ch);
+			return ch != ' ';
+			});
+}
+
 Piece L {
 	std::array<Rotation, ROTATION_NUMBER>{
 		std::array<Point, PIECE_POINT_NUMBER>{Point{1, 0}, Point{1, 1}, Point{1, 2}, Point{2, 2}},
@@ -117,13 +137,3 @@ Piece L {
 	}
 };
 
-bool collides(const Rotation& rotation, const Position& position, const std::string& area) {
-	return std::any_of(rotation.coordinates.cbegin(), rotation.coordinates.cend(),
-			[&area, &position](const Point& p) {
-			const auto index = (p.x + position.get_x())
-			  + ((p.y + position.get_y()) * ROW_CHARS);
-			const char ch = area[index];
-			//printf("collides: index: %d, char: %c\n", index, ch);
-			return ch != ' ';
-			});
-}

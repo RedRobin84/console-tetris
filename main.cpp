@@ -34,18 +34,23 @@ int main() {
 	render(L, current_pos);
 	refresh();
     	switch (getch()) {
-    		case KEY_LEFT:
-			current_pos.move_left();
-			break;
-		case KEY_RIGHT:
-			break;
-		case KEY_UP:
-			break;
-		case KEY_DOWN:
-			break;
-		case 'q':
-			running = false;
-			continue;
+            case KEY_LEFT:
+		if (not collides(L.get_current_rotation(), current_pos.next_left(), area)) {
+		    current_pos.move_left();
+		}
+                break;
+            case KEY_RIGHT:
+		if (not collides(L.get_current_rotation(), current_pos.next_right(), area)) {
+		    current_pos.move_right();
+		}
+	        break;
+	    case KEY_UP:
+		break;
+	    case KEY_DOWN:
+		break;
+	    case 'q':
+		running = false;
+		continue;
 	}
 
 	clear();
