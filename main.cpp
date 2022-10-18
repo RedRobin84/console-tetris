@@ -51,6 +51,9 @@ int main() {
 		}
 		break;
 	    case KEY_DOWN:
+		if (not collides(*L.previous_rotation(), current_pos.getCoordinates(), area)) {
+		    L.current_rotation = L.previous_rotation();
+		}
 		break;
 	    case 'q':
 		running = false;
