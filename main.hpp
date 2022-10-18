@@ -89,7 +89,10 @@ class Position {
 			return value.x;
 		}
 		const int get_y() const {
-			return value.y;
+		return value.y;
+		}
+		const Point getCoordinates() {
+			return value;
 		}
 		const Point next_left() {
 			return {value.x - 1, value.y};
@@ -99,7 +102,7 @@ class Position {
 		}
 		const Point next_down() {
 			return {value.x, value.y + 1};
-		}	
+		}
 		void move_left() {
 			if (value.x > 0) {
 				value.x -= 1;

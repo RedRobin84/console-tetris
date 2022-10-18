@@ -33,6 +33,7 @@ int main() {
 	printw(area.c_str());
 	render(L, current_pos);
 	refresh();
+	std::this_thread::sleep_for(std::chrono::milliseconds(10));
     	switch (getch()) {
             case KEY_LEFT:
 		if (not collides(L.get_current_rotation(), current_pos.next_left(), area)) {
@@ -45,6 +46,9 @@ int main() {
 		}
 	        break;
 	    case KEY_UP:
+		if (not collides(*L.next_rotation(), current_pos.getCoordinates(), area)) {
+		    L.current_rotation = L.next_rotation();
+		}
 		break;
 	    case KEY_DOWN:
 		break;
