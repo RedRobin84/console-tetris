@@ -131,6 +131,18 @@ bool collides(const Rotation& rotation, const Point& position, const std::string
 			});
 }
 
+void runGameTickUpdates() {}
+
+template <
+    class result_t   = std::chrono::milliseconds,
+    class clock_t    = std::chrono::steady_clock,
+    class duration_t = std::chrono::milliseconds
+>
+auto since(std::chrono::time_point<clock_t, duration_t> const& start)
+{
+    return std::chrono::duration_cast<result_t>(clock_t::now() - start);
+}
+
 Piece L {
 	std::array<Rotation, ROTATION_NUMBER>{
 		std::array<Point, PIECE_POINT_NUMBER>{Point{1, 0}, Point{1, 1}, Point{1, 2}, Point{2, 2}},

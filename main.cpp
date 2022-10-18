@@ -28,6 +28,7 @@ int main() {
     Position current_pos {starting_position};
     bool running = true;
     const auto area {play_field.substr(1)};
+    auto start = std::chrono::steady_clock::now();
 
     while(running) {
 	printw(area.c_str());
@@ -59,7 +60,10 @@ int main() {
 		running = false;
 		continue;
 	}
-
+	if (since(start).count() > 1000) {
+		runGameTickUpdates();
+		start = std::chrono::steady_clock::now();
+	}
 	clear();
     }
 
