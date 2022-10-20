@@ -27,7 +27,7 @@ int main() {
     curs_set(0);           // set the cursor to invisible
     Position current_pos {starting_position};
     bool running = true;
-    const auto area {play_field.substr(1)};
+    auto area {play_field.substr(1)};
     auto start = std::chrono::steady_clock::now();
 
     while(running) {
@@ -61,6 +61,12 @@ int main() {
 		continue;
 	}
 	if (since(start).count() > 1000) {
+	    if (collides(L.get_current_rotation(), current_pos.next_down(), area)) {
+	        update_area(L.current_rotation, current_pos.getCoordinates(), area);
+		current_pos = {starting_position};
+	    } else {
+	        current_pos = current_pos.next_down();
+	    }
 	//if current rotation collides with next down position
 	//write current rotation to current position in area
 	//check for completed rows, if present, delete them and then merge not completed ones
