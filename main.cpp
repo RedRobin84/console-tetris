@@ -61,7 +61,11 @@ int main() {
 		continue;
 	}
 	if (since(start).count() > 1000) {
-		runGameTickUpdates();
+	//if current rotation collides with next down position
+	//write current rotation to current position in area
+	//check for completed rows, if present, delete them and then merge not completed ones
+	//create new Piece - if piece collides on creation - running false
+	//else current_pos = next down position
 		start = std::chrono::steady_clock::now();
 	}
 	clear();

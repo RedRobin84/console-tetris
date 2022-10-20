@@ -120,18 +120,27 @@ class Position {
 		}
 };
 
+const int get_area_index(const Point& rotation_point, const Point& position) {
+	return (rotation_point.x + position.x) + ((rotation_point.y + position.y) * ROW_CHARS);
+}
+
 bool collides(const Rotation& rotation, const Point& position, const std::string& area) {
 	return std::any_of(rotation.coordinates.cbegin(), rotation.coordinates.cend(),
 			[&area, &position](const Point& p) {
-			const auto index = (p.x + position.x)
-			  + ((p.y + position.y) * ROW_CHARS);
+			const auto index = get_area_index(p, position);
 			const char ch = area[index];
 			//printf("collides: index: %d, char: %c\n", index, ch);
 			return ch != ' ';
 			});
 }
 
-void runGameTickUpdates() {}
+void update_area(const Rotation* rotation, const Point& position, std::string& area) {
+	std::for_each(rotation->coordinates.cbegin(), rotation->coordinates.cend(), 
+			[&position, &area](const Point& p) {
+			const auto index = get_area_index(p, position);
+			area[index] = '0';
+			});
+}
 
 template <
     class result_t   = std::chrono::milliseconds,
