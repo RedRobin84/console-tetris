@@ -96,7 +96,7 @@ void when_position_on_very_top_left_collide_with_colliding_rotation() {
 }
 
 int main() {
-	printf("*** MAIN TEST ***\n\n");
+	printf("\n*** MAIN TEST ***\n\n");
 	first_rotation_default_after_creation();
 	piece_next_rotation_successfully_set();
 	when_calling_next_rotation_on_last_element_then_first_is_selected();

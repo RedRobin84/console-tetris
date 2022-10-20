@@ -2,3 +2,4 @@
 
 ./main_test
 ./main_position_test
+./main_area_test
