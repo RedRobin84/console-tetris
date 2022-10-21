@@ -62,6 +62,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXX
 )";
 
 const int MIN_X = 0;
+const int MIN_X_AREA = 1;
 const int MIN_Y = 1; // Skipping first row
 const int MAX = 10;
 const int ROW_CHARS = 26; //25 + \n
@@ -69,7 +70,9 @@ const int ROW_CHARS = 26; //25 + \n
 const Point UPPER_LEFT_BORDER {MIN_X, MIN_Y};
 const Point UPPER_RIGHT_BORDER {MAX, MIN_Y};
 const Point BOTTOM_LEFT_BORDER {MIN_X, MAX};
+const Point AREA_BOTTOM_LEFT_BORDER {AREA_MIN_X, MAX};
 const Point BOTTOM_RIGHT_BORDER {MAX, MAX};
+const Point AREA_BOTTOM_RIGHT_BORDER {MAX, MAX};
 const Point TOP_CENTER {MAX / 2, MIN_Y};
 
 const int ROW_NUMBER {MAX};

@@ -3,6 +3,7 @@
 #include <chrono>
 #include <thread>
 #include <algorithm>
+#include <vector>
 
 const Point starting_position {TOP_CENTER};
 
@@ -63,6 +64,21 @@ int main() {
 	if (since(start).count() > 1000) {
 	    if (collides(L.get_current_rotation(), current_pos.next_down(), area)) {
 	        update_area(L.current_rotation, current_pos.getCoordinates(), area);
+		std::vector<int> lines_to_delete;
+		lines_to_delete.reserve(4);
+		int old_size = lines_to_delete.size();
+		for (int i = 10; i > 0; i--) {
+		    auto start_index = area.cbegin() + 1 + ((i * ROW_CHARS) - 1);
+		    if (std::all_of(start_index, start_index + ROW_CHARS, 
+					    [&area](const char ch) {ch == '0'});) {
+			lines_to_delete.push(i * ROW_CHARS);
+		    }
+		    if (lines_to_delete.size() == old_size) {
+			break;
+		    }
+		    old_size = lines_to_delete.size();
+		}
+
 		current_pos = {starting_position};
 	    } else {
 	        current_pos = current_pos.next_down();
