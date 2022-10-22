@@ -4,6 +4,7 @@
 #include <array>
 #include <compare>
 #include <iterator>
+#include <vector>
 
 const int ROTATION_NUMBER = 4;
 const int PIECE_POINT_NUMBER = 4;
@@ -70,7 +71,7 @@ const int ROW_CHARS = 26; //25 + \n
 const Point UPPER_LEFT_BORDER {MIN_X, MIN_Y};
 const Point UPPER_RIGHT_BORDER {MAX, MIN_Y};
 const Point BOTTOM_LEFT_BORDER {MIN_X, MAX};
-const Point AREA_BOTTOM_LEFT_BORDER {AREA_MIN_X, MAX};
+const Point AREA_BOTTOM_LEFT_BORDER {MIN_X_AREA, MAX};
 const Point BOTTOM_RIGHT_BORDER {MAX, MAX};
 const Point AREA_BOTTOM_RIGHT_BORDER {MAX, MAX};
 const Point TOP_CENTER {MAX / 2, MIN_Y};
@@ -144,6 +145,27 @@ void update_area(const Rotation* rotation, const Point& position, std::string& a
 			area[index] = '0';
 			});
 }
+
+const auto get_nth_line_iterator(const int line_number, const std::string& area) {
+   return area.cbegin() + 1 + ((line_number * ROW_CHARS) - 1);
+}
+
+void set_indexes_of_completed_lines(std::vector<int>& completed_lines_indexes, std::string area) {
+    size_t old_size = completed_lines_indexes.size();
+	for (int i = 10; i > 0; i--) {
+	    auto start_index = get_nth_line_iterator(i, area);
+	    if (std::all_of(start_index, start_index + ROW_CHARS,
+			[](const char ch) {return ch == '0';})) {
+			    completed_lines_indexes.push_back((i * ROW_CHARS) + 1); // + 1 game line begins at 2nd tile
+	    }
+	    if (completed_lines_indexes.size() == old_size) {
+		break;
+	    }
+	    old_size = completed_lines_indexes.size();
+	}
+}
+
+void rebuild_area_with_non_completed_lines(std::string& area, std::vector<int> completed_lines_indexes) {}
 
 template <
     class result_t   = std::chrono::milliseconds,
