@@ -146,17 +146,25 @@ void update_area(const Rotation* rotation, const Point& position, std::string& a
 			});
 }
 
-const auto get_nth_line_iterator(const int line_number, const std::string& area) {
-   return area.cbegin() + 1 + ((line_number * ROW_CHARS) - 1);
+const int get_line_starting_index(const int line_number) {
+    return (line_number * ROW_CHARS) + 1; // + 1 game line begins at 2nd tile
+}
+
+const auto get_nth_line_end(std::string::const_iterator line_begin) {
+    return line_begin + ROW_CHARS;
+}
+
+const auto get_nth_line_begin(const int line_number, const std::string& area) {
+   return area.cbegin() + (get_line_starting_index(line_number) - 1); // - 1 for cbegin()
 }
 
 void set_indexes_of_completed_lines(std::vector<int>& completed_lines_indexes, std::string area) {
     size_t old_size = completed_lines_indexes.size();
 	for (int i = 10; i > 0; i--) {
-	    auto start_index = get_nth_line_iterator(i, area);
-	    if (std::all_of(start_index, start_index + ROW_CHARS,
+	    auto line_begin = get_nth_line_begin(i, area);
+	    if (std::all_of(line_begin, get_nth_line_end(line_begin),
 			[](const char ch) {return ch == '0';})) {
-			    completed_lines_indexes.push_back((i * ROW_CHARS) + 1); // + 1 game line begins at 2nd tile
+			    completed_lines_indexes.push_back(get_line_starting_index(i)); 
 	    }
 	    if (completed_lines_indexes.size() == old_size) {
 		break;
