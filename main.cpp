@@ -10,11 +10,11 @@ void draw_on_pos(const Point& point) {
 	mvprintw(point.y, point.x, DEFAULT_CHAR);
 }
 
-void render(const Piece& piece, const Position& pos) {
+const void render(const Piece& piece, const Position& pos) {
     std::for_each(piece.current_rotation->coordinates.cbegin(),
 	piece.current_rotation->coordinates.cend(),
 	[&pos](const Point& p) {
-            draw_on_pos({p.x + pos.get_x(), p.y + pos.get_y()});
+            draw_on_pos(pos.for_point(p));
         });
 }
 

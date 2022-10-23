@@ -5,6 +5,7 @@
 #include <compare>
 #include <iterator>
 #include <vector>
+#include <set>
 
 const int ROTATION_NUMBER = 4;
 const int PIECE_POINT_NUMBER = 4;
@@ -20,6 +21,8 @@ struct Point
 struct Rotation
 {
 	const std::array<Point, PIECE_POINT_NUMBER> coordinates;
+
+	//constexpr std::set<int
 };
 
 struct Piece
@@ -95,6 +98,9 @@ class Position {
 		const int get_y() const {
 		return value.y;
 		}
+		const Point for_point(const Point& point) const {
+			return {point.x + get_x(), point.y + get_y()};
+		}
 		const Point getCoordinates() {
 			return value;
 		}
@@ -159,15 +165,17 @@ const auto get_nth_line_begin(const int line_number, const std::string& area) {
 }
 
 void set_indexes_of_completed_lines(std::vector<int>& completed_lines_indexes, std::string area) {
-    size_t old_size = completed_lines_indexes.size();
+    size_t old_size = completed_lines_indexes.size(); //logarhitmic variable
 	for (int i = 10; i > 0; i--) {
 	    auto line_begin = get_nth_line_begin(i, area);
-	    if (std::all_of(line_begin, get_nth_line_end(line_begin),
+	    auto line_end = get_nth_line_end(line_begin);
+	    //if (std::any_of(line_begin, line_end)
+	    if (std::all_of(line_begin, line_end,
 			[](const char ch) {return ch == '0';})) {
 			    completed_lines_indexes.push_back(get_line_starting_index(i)); 
 	    }
 	    if (completed_lines_indexes.size() == old_size) {
-		break;
+		break; // no
 	    }
 	    old_size = completed_lines_indexes.size();
 	}
