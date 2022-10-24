@@ -22,7 +22,14 @@ struct Rotation
 {
 	const std::array<Point, PIECE_POINT_NUMBER> coordinates;
 
-	//constexpr std::set<int
+	std::set<int> get_line_set() {
+		std::set<int> lines;
+		std::for_each(coordinates.cbegin(), coordinates.cend(),
+				[&lines](const Point& p) {
+				lines.insert(p.y);
+				});
+		return lines;
+	}
 };
 
 struct Piece
