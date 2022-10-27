@@ -4,7 +4,6 @@
 #include <array>
 #include <compare>
 #include <iterator>
-#include <vector>
 #include <set>
 
 const int ROTATION_NUMBER = 4;
@@ -22,7 +21,7 @@ struct Rotation
 {
 	const std::array<Point, PIECE_POINT_NUMBER> coordinates;
 
-	const std::set<int> get_line_set() const {
+	std::set<int> get_line_set() const {
 		std::set<int> lines;
 		std::for_each(coordinates.cbegin(), coordinates.cend(),
 				[&lines](const Point& p) {
@@ -111,7 +110,7 @@ class Position {
 		const int get_line(const int y) const {
 			return y + get_y();
 		}
-		const Point getCoordinates() {
+		const Point get_coordinates() {
 			return value;
 		}
 		const Point next_left() {
@@ -231,9 +230,9 @@ void rebuild_area_with_non_completed_lines(std::string& area, std::set<int> comp
 	    break;
 	}
         auto write_line_begin = get_nth_line_begin(write_line, area);
-	move_line(current_line_begin, write_line_begin);
-	current_line--;
-	write_line--;
+        move_line(current_line_begin, write_line_begin);
+        current_line--;
+        write_line--;
     }
 }
 
