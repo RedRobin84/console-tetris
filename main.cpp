@@ -29,8 +29,6 @@ int main() {
     bool running = true;
     auto area {play_field.substr(1)};
     auto start = std::chrono::steady_clock::now();
-    std::vector<int> completed_lines_indexes;
-    completed_lines_indexes.reserve(4);
 
     while(running) {
 	printw(area.c_str());
@@ -65,12 +63,14 @@ int main() {
 	if (since(start).count() > 1000) {
 	    if (collides(L.get_current_rotation(), current_pos.next_down(), area)) {
 	        update_area(L.current_rotation, current_pos.getCoordinates(), area);
-		set_indexes_of_completed_lines(completed_lines_indexes, area);
-		if (not completed_lines_indexes.empty()) {
-		    rebuild_area_with_non_completed_lines(area, completed_lines_indexes);
-		    completed_lines_indexes.clear();
+		auto completed_lines = get_completed_lines(L.current_rotation->get_line_set(), current_pos, area);
+		if (not completed_lines.empty()) {
+		    rebuild_area_with_non_completed_lines(area, completed_lines);
 		}
 		current_pos = {starting_position};
+		if (collides(L.get_current_rotation(), current_pos.getCoordinates(), area)) {
+			running = false;
+		}
 	    } else {
 	        current_pos = current_pos.next_down();
 	    }

@@ -22,7 +22,7 @@ struct Rotation
 {
 	const std::array<Point, PIECE_POINT_NUMBER> coordinates;
 
-	std::set<int> get_line_set() {
+	const std::set<int> get_line_set() const {
 		std::set<int> lines;
 		std::for_each(coordinates.cbegin(), coordinates.cend(),
 				[&lines](const Point& p) {
@@ -108,6 +108,9 @@ class Position {
 		const Point for_point(const Point& point) const {
 			return {point.x + get_x(), point.y + get_y()};
 		}
+		const int get_line(const int y) const {
+			return y + get_y();
+		}
 		const Point getCoordinates() {
 			return value;
 		}
@@ -163,32 +166,76 @@ const int get_line_starting_index(const int line_number) {
     return (line_number * ROW_CHARS) + 1; // + 1 game line begins at 2nd tile
 }
 
-const auto get_nth_line_end(std::string::const_iterator line_begin) {
+auto get_nth_line_end(std::string::iterator line_begin) {
     return line_begin + ROW_CHARS;
 }
 
-const auto get_nth_line_begin(const int line_number, const std::string& area) {
+
+auto get_nth_line_end(std::string::const_iterator line_begin) {
+    return line_begin + ROW_CHARS;
+}
+
+auto get_nth_line_begin(const int line_number, std::string& area) {
+   return area.begin() + (get_line_starting_index(line_number) - 1); // - 1 for cbegin()
+}
+
+
+auto get_nth_line_begin(const int line_number, const std::string& area) {
    return area.cbegin() + (get_line_starting_index(line_number) - 1); // - 1 for cbegin()
 }
 
-void set_indexes_of_completed_lines(std::vector<int>& completed_lines_indexes, std::string area) {
-    size_t old_size = completed_lines_indexes.size(); //logarhitmic variable
-	for (int i = 10; i > 0; i--) {
-	    auto line_begin = get_nth_line_begin(i, area);
-	    auto line_end = get_nth_line_end(line_begin);
-	    //if (std::any_of(line_begin, line_end)
-	    if (std::all_of(line_begin, line_end,
-			[](const char ch) {return ch == '0';})) {
-			    completed_lines_indexes.push_back(get_line_starting_index(i)); 
-	    }
-	    if (completed_lines_indexes.size() == old_size) {
-		break; // no
-	    }
-	    old_size = completed_lines_indexes.size();
-	}
+bool is_line_completed(const int line, const std::string& area) {
+    auto line_begin = get_nth_line_begin(line, area);
+    auto line_end = get_nth_line_end(line_begin);
+        return std::all_of(line_begin, line_end,
+	       [](const char ch) {return ch == '0';});
 }
 
-void rebuild_area_with_non_completed_lines(std::string& area, std::vector<int> completed_lines_indexes) {}
+std::set<int> get_completed_lines(const std::set<int>& lines, const Position& pos, const std::string& area) {
+	std::set<int> completed_lines;
+	std::for_each(lines.cbegin(), lines.cend(), [&completed_lines, &area, &pos]
+			(const int line) {
+			const auto computed_line = pos.get_line(line);
+			if (is_line_completed(computed_line, area)) {
+			    completed_lines.insert(line);
+			}});
+	return completed_lines;
+}
+
+void move_line(std::string::iterator line_from_begin, std::string::iterator line_to_begin) {
+    auto line_from_end = get_nth_line_end(line_from_begin);
+    for (auto from = line_from_begin, to = line_to_begin; from != line_from_end; from++, to++) {
+	    *to = *from;
+	    *from = ' ';
+    }
+}
+
+bool line_empty(std::string::iterator line_begin) {
+    auto line_end = get_nth_line_end(line_begin);
+    return (not std::any_of(line_begin, line_end, [](const char ch) {return ch == '0';}));
+}
+
+void rebuild_area_with_non_completed_lines(std::string& area, std::set<int> completed_lines) {
+    auto current_line = *completed_lines.rend();
+    auto write_line = current_line;
+    completed_lines.erase(current_line);
+    current_line--;
+    while (current_line > 0) {
+        if ((not completed_lines.empty()) and (completed_lines.find(current_line) != completed_lines.end())) {
+	    completed_lines.erase(current_line);
+	    current_line--;
+	    continue;
+	}
+        auto current_line_begin = get_nth_line_begin(current_line, area);
+	if (line_empty(current_line_begin)) {
+	    break;
+	}
+        auto write_line_begin = get_nth_line_begin(write_line, area);
+	move_line(current_line_begin, write_line_begin);
+	current_line--;
+	write_line--;
+    }
+}
 
 template <
     class result_t   = std::chrono::milliseconds,
