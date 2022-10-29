@@ -7,7 +7,7 @@ void when_default_ctr_used_top_center_is_used() {
 	printf("PASSED.\n");
 	return;
     }
-    printf("FAILED. Assertion failed.");
+    printf("FAILED. Assertion failed.\n");
 }
 
 void when_move_left_to_legal_position__then_move_to_that_position() {
@@ -18,7 +18,7 @@ void when_move_left_to_legal_position__then_move_to_that_position() {
 	printf("PASSED.\n");
 	return;
     }
-    printf("FAILED. Assertion failed.");
+    printf("FAILED. Assertion failed.\n");
 }
 
 
@@ -30,7 +30,7 @@ void when_move_left_to_illegal_position__then_keep_position() {
 	printf("PASSED.\n");
 	return;
     }
-    printf("FAILED. Assertion failed.");
+    printf("FAILED. Assertion failed.\n");
 }
 
 int main() {

@@ -41,5 +41,6 @@ int main() {
     get_area_index_success();
     successfully_written_char();
     get_char_at_index();
+    printf("\n");
     return 0;
 }

@@ -76,6 +76,7 @@ const int MIN_X_AREA = 1;
 const int MIN_Y = 1; // Skipping first row
 const int MAX = 10;
 const int ROW_CHARS = 26; //25 + \n
+const int AREA_ROW_CHARS = 10; // Game fields between walls
 
 const Point UPPER_LEFT_BORDER {MIN_X, MIN_Y};
 const Point UPPER_RIGHT_BORDER {MAX, MIN_Y};
@@ -166,21 +167,21 @@ const int get_line_starting_index(const int line_number) {
 }
 
 auto get_nth_line_end(std::string::iterator line_begin) {
-    return line_begin + ROW_CHARS;
+    return line_begin + AREA_ROW_CHARS;
 }
 
 
 auto get_nth_line_end(std::string::const_iterator line_begin) {
-    return line_begin + ROW_CHARS;
+    return line_begin + AREA_ROW_CHARS;
 }
 
 auto get_nth_line_begin(const int line_number, std::string& area) {
-   return area.begin() + (get_line_starting_index(line_number) - 1); // - 1 for cbegin()
+   return area.begin() + get_line_starting_index(line_number);
 }
 
 
 auto get_nth_line_begin(const int line_number, const std::string& area) {
-   return area.cbegin() + (get_line_starting_index(line_number) - 1); // - 1 for cbegin()
+   return area.cbegin() + get_line_starting_index(line_number);
 }
 
 bool is_line_completed(const int line, const std::string& area) {
