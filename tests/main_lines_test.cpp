@@ -89,12 +89,64 @@ XXXXXXXXXXXXXXXXXXXXXXXXX
     printf("FAILED. Line end should be 'X' and was '%c'. Last char of the line should be 'T' and was '%c'.\n", *first_line_end, *(first_line_end - 1));
 }
 
+void line_is_completed() {
+    printf("line_is_completed: ");
+
+const std::string play_field = R"(
+XXXXXXXXXXXXXXXXXXXXXXXXX
+X          X    Score   X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X0000000000X            X
+XXXXXXXXXXXXXXXXXXXXXXXXX
+)";
+    const bool line_completed = is_line_completed(10, play_field.substr(1));
+    if (line_completed) {
+        printf("PASSED.\n");
+        return;
+    }
+    printf("FAILED. Line is not completed.\n");
+}
+
+void line_is_not_completed() {
+    printf("line_is_not_completed: ");
+
+const std::string play_field = R"(
+XXXXXXXXXXXXXXXXXXXXXXXXX
+X          X    Score   X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X000 000000X            X
+XXXXXXXXXXXXXXXXXXXXXXXXX
+)";
+    const bool line_completed = is_line_completed(10, play_field.substr(1));
+    if (not line_completed) {
+        printf("PASSED.\n");
+        return;
+    }
+    printf("FAILED. Line is completed.\n");
+}
+
 int main() {
     printf("*** Area lines TEST ***\n\n");
     return_unique_lines_for_rotation();
     get_index_of_first_line_measuring();
     get_line_begin_value_should_match_T_char();
     get_line_end_value_should_match_T_char();
+    line_is_completed();
+    line_is_not_completed();
     printf("\n");
     return 0;
 }
