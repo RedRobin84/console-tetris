@@ -197,7 +197,7 @@ std::set<int> get_completed_lines(const std::set<int>& lines, const Position& po
 			(const int line) {
 			const auto computed_line = pos.get_line(line);
 			if (is_line_completed(computed_line, area)) {
-			    completed_lines.insert(line);
+			    completed_lines.insert(computed_line);
 			}});
 	return completed_lines;
 }

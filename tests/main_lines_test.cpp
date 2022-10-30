@@ -139,6 +139,35 @@ XXXXXXXXXXXXXXXXXXXXXXXXX
     printf("FAILED. Line is completed.\n");
 }
 
+void get_completed_lines_test() {
+    printf("get_completed_lines_test: ");
+
+const std::string play_field = R"(
+XXXXXXXXXXXXXXXXXXXXXXXXX
+X          X    Score   X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X   0      X            X
+X0000000000X            X
+X0000000000X            X
+XXXXXXXXXXXXXXXXXXXXXXXXX
+)";
+    Position pos {{3, 8}};
+    const std::set<int> rotation_lines = L.rotations[0].get_line_set();
+    std::set<int> completed_lines = get_completed_lines(rotation_lines, pos, play_field.substr(1));
+    if (completed_lines.size() == 2
+            and completed_lines.find(9) != completed_lines.end()
+            and completed_lines.find(10) != completed_lines.end()) {
+        printf("PASSED.\n");
+        return;
+    }
+    printf("FAILED. Set size (%lu) or/and elements do not match.\n", completed_lines.size());
+}
+
 int main() {
     printf("*** Area lines TEST ***\n\n");
     return_unique_lines_for_rotation();
@@ -147,6 +176,7 @@ int main() {
     get_line_end_value_should_match_T_char();
     line_is_completed();
     line_is_not_completed();
+    get_completed_lines_test();
     printf("\n");
     return 0;
 }
