@@ -6,55 +6,9 @@
 #include <iterator>
 #include <set>
 
-const int ROTATION_NUMBER = 4;
-const int PIECE_POINT_NUMBER = 4;
+#include "pieces.hpp"
+#include "point.hpp"
 
-struct Point 
-{
-	int x;
-	int y;
-
-	auto operator<=>(const Point&) const = default;
-};
-
-struct Rotation
-{
-	const std::array<Point, PIECE_POINT_NUMBER> coordinates;
-
-	std::set<int> get_line_set() const {
-	    std::set<int> lines;
-	    std::for_each(coordinates.cbegin(), coordinates.cend(),
-		[&lines](const Point& p) {
-		lines.insert(p.y);
-		});
-	    return lines;
-	}
-};
-
-struct Piece
-{
-	const std::array<Rotation, ROTATION_NUMBER> rotations;
-	const Rotation* current_rotation = rotations.begin();
-
-	const Rotation* next_rotation() const {
-		auto next_element = std::next(current_rotation);
-		if (next_element == rotations.cend()) {
-			return rotations.cbegin();
-		}
-		return next_element;
-	}
-
-	const Rotation* previous_rotation() const {
-		if (current_rotation == rotations.cbegin()) {
-			return &rotations.back();
-		}
-		return std::prev(current_rotation);
-	}
-
-	const Rotation& get_current_rotation() {
-		return *current_rotation;
-	}
-};
 
 const std::string play_field = R"(
 XXXXXXXXXXXXXXXXXXXXXXXXX
@@ -223,7 +177,7 @@ void rebuild_area_with_non_completed_lines(std::string& area, std::set<int> comp
     while (current_line > 0) {
         if ((not completed_lines.empty()) and (completed_lines.find(current_line) != completed_lines.end())) {
 	    completed_lines.erase(current_line);
-	    erase_line(get_nth_line_begin(current_line);
+	    erase_line(get_nth_line_begin(current_line, area));
 	    current_line--;
 	    continue;
 	}
@@ -247,13 +201,4 @@ auto since(std::chrono::time_point<clock_t, duration_t> const& start)
 {
     return std::chrono::duration_cast<result_t>(clock_t::now() - start);
 }
-
-Piece L {
-	std::array<Rotation, ROTATION_NUMBER>{
-		std::array<Point, PIECE_POINT_NUMBER>{Point{1, 0}, Point{1, 1}, Point{1, 2}, Point{2, 2}},
-		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 2}, Point{0, 1}, Point{1, 1}, Point{2, 1}},
-		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 0}, Point{1, 0}, Point{1, 1}, Point{1, 2}},
-		std::array<Point, PIECE_POINT_NUMBER>{Point{0, 1}, Point{1, 1}, Point{2, 1}, Point{2, 0}}
-	}
-};
 
