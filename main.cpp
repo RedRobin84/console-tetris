@@ -10,11 +10,11 @@ void draw_on_pos(const Point& point) {
 	mvprintw(point.y, point.x, DEFAULT_CHAR);
 }
 
-void render(const Piece& piece, const Position& pos) {
+const void render(const Piece& piece, const Position& pos) {
     std::for_each(piece.current_rotation->coordinates.cbegin(),
 	piece.current_rotation->coordinates.cend(),
 	[&pos](const Point& p) {
-            draw_on_pos({p.x + pos.get_x(), p.y + pos.get_y()});
+            draw_on_pos(pos.for_point(p));
         });
 }
 
@@ -47,12 +47,12 @@ int main() {
 		}
 	        break;
 	    case KEY_UP:
-		if (not collides(*L.next_rotation(), current_pos.getCoordinates(), area)) {
+		if (not collides(*L.next_rotation(), current_pos.get_coordinates(), area)) {
 		    L.current_rotation = L.next_rotation();
 		}
 		break;
 	    case KEY_DOWN:
-		if (not collides(*L.previous_rotation(), current_pos.getCoordinates(), area)) {
+		if (not collides(*L.previous_rotation(), current_pos.get_coordinates(), area)) {
 		    L.current_rotation = L.previous_rotation();
 		}
 		break;
@@ -62,8 +62,15 @@ int main() {
 	}
 	if (since(start).count() > 1000) {
 	    if (collides(L.get_current_rotation(), current_pos.next_down(), area)) {
-	        update_area(L.current_rotation, current_pos.getCoordinates(), area);
+	        update_area(L.current_rotation, current_pos.get_coordinates(), area);
+		auto completed_lines = get_completed_lines(L.current_rotation->get_line_set(), current_pos, area);
+		if (not completed_lines.empty()) {
+		    rebuild_area_with_non_completed_lines(area, completed_lines);
+		}
 		current_pos = {starting_position};
+		if (collides(L.get_current_rotation(), current_pos.get_coordinates(), area)) {
+			running = false;
+		}
 	    } else {
 	        current_pos = current_pos.next_down();
 	    }
