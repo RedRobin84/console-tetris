@@ -170,7 +170,6 @@ auto get_nth_line_end(std::string::iterator line_begin) {
     return line_begin + AREA_ROW_CHARS;
 }
 
-
 auto get_nth_line_end(std::string::const_iterator line_begin) {
     return line_begin + AREA_ROW_CHARS;
 }
@@ -178,7 +177,6 @@ auto get_nth_line_end(std::string::const_iterator line_begin) {
 auto get_nth_line_begin(const int line_number, std::string& area) {
    return area.begin() + get_line_starting_index(line_number);
 }
-
 
 auto get_nth_line_begin(const int line_number, const std::string& area) {
    return area.cbegin() + get_line_starting_index(line_number);
