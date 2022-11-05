@@ -210,19 +210,22 @@ void move_line(std::string::iterator line_from_begin, std::string::iterator line
     }
 }
 
+void erase_line(std::string::iterator line_begin) {
+    std::for_each(line_begin, get_nth_line_end(line_begin), [] (char& ch) {ch = ' ';});
+}
+
 bool line_empty(std::string::iterator line_begin) {
     auto line_end = get_nth_line_end(line_begin);
     return (not std::any_of(line_begin, line_end, [](const char ch) {return ch == '0';}));
 }
 
 void rebuild_area_with_non_completed_lines(std::string& area, std::set<int> completed_lines) {
-    auto current_line = *completed_lines.rend();
+    auto current_line = *completed_lines.rbegin();
     auto write_line = current_line;
-    completed_lines.erase(current_line);
-    current_line--;
     while (current_line > 0) {
         if ((not completed_lines.empty()) and (completed_lines.find(current_line) != completed_lines.end())) {
 	    completed_lines.erase(current_line);
+	    erase_line(get_nth_line_begin(current_line);
 	    current_line--;
 	    continue;
 	}

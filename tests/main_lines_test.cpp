@@ -168,6 +168,103 @@ XXXXXXXXXXXXXXXXXXXXXXXXX
     printf("FAILED. Set size (%lu) or/and elements do not match.\n", completed_lines.size());
 }
 
+void move_line_test() {
+    printf("move_line_test: ");
+
+std::string area_before = R"(
+XXXXXXXXXXXXXXXXXXXXXXXXX
+X          X    Score   X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X0000000000X            X
+X          X            X
+XXXXXXXXXXXXXXXXXXXXXXXXX
+)";
+
+std::string area_after = R"(
+XXXXXXXXXXXXXXXXXXXXXXXXX
+X          X    Score   X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X0000000000X            X
+XXXXXXXXXXXXXXXXXXXXXXXXX
+)";
+    auto area_before_formatted = area_before.substr(1);
+    auto area_after_formatted = area_after.substr(1);
+    auto ninth_line_begin = get_nth_line_begin(9, area_before_formatted); 
+    auto tenth_line_begin = get_nth_line_begin(10, area_before_formatted); 
+    move_line(ninth_line_begin, tenth_line_begin);
+    if (area_before_formatted == area_after_formatted) {
+        printf("PASSED.\n");
+	return;
+    }
+    printf("FAILED. Expected area\n%s\n but is\n%s\n.", area_before_formatted.c_str(), area_after_formatted.c_str());
+}
+
+void line_empty_test() {
+    printf("line_empty_test: ");
+    std::string area_formatted = play_field.substr(1);
+    auto first_line_begin = get_nth_line_begin(1, area_formatted);
+    if (line_empty(first_line_begin)) {
+	printf("PASSED.\n");
+	return;
+    }
+    printf("FAILED. First line is not empty\n");
+}
+
+void rebuild_area_test() {
+printf("rebuild_area_test: ");
+std::string area_before = R"(
+XXXXXXXXXXXXXXXXXXXXXXXXX
+X          X    Score   X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X     0    X            X
+X0000000000X            X
+X0000000000X            X
+X00 0000000X            X
+XXXXXXXXXXXXXXXXXXXXXXXXX
+)";
+
+std::string area_after = R"(
+XXXXXXXXXXXXXXXXXXXXXXXXX
+X          X    Score   X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X          X            X
+X     0    X            X
+X00 0000000X            X
+XXXXXXXXXXXXXXXXXXXXXXXXX
+)";
+    std::string area_before_formatted = area_before.substr(1);
+    std::string area_after_formatted = area_after.substr(1);
+    std::set<int> completed_lines {8, 9};
+    rebuild_area_with_non_completed_lines(area_before_formatted, completed_lines);
+    if (area_before_formatted == area_after_formatted) {
+	printf("PASSED.\n");
+	return;
+    }
+    printf("FAILED. Expected area\n%s\n but is\n%s\n.", area_before_formatted.c_str(), area_after_formatted.c_str());
+}
+
 int main() {
     printf("*** Area lines TEST ***\n\n");
     return_unique_lines_for_rotation();
@@ -177,6 +274,9 @@ int main() {
     line_is_completed();
     line_is_not_completed();
     get_completed_lines_test();
+    line_empty_test();
+    move_line_test();
+    rebuild_area_test();
     printf("\n");
     return 0;
 }
