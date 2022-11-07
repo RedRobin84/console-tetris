@@ -1,13 +1,13 @@
 #pragma once
 
+#include "pieces.hpp"
+#include "point.hpp"
+
 #include <string>
-#include <array>
 #include <compare>
 #include <iterator>
 #include <set>
 
-#include "pieces.hpp"
-#include "point.hpp"
 
 
 const std::string play_field = R"(
@@ -78,7 +78,7 @@ class Position {
 			return {value.x, value.y + 1};
 		}
 		void move_left() {
-			if (value.x > 0) {
+			if (value.x > -1) {
 				value.x -= 1;
 			}
 		}

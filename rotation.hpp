@@ -1,5 +1,6 @@
 #pragma once
 #include "point.hpp"
+#include <array>
 
 const int PIECE_POINT_NUMBER = 4;
 

@@ -2,7 +2,7 @@
 
 void return_unique_lines_for_rotation() {
     printf("return_unique_lines_for_rotation: ");
-    const auto line_set = L.rotations[1].get_line_set();
+    const auto line_set = pieces[0].rotations[1].get_line_set();
     const auto set_size = line_set.size();
     const bool line_one_found = line_set.find(1) != line_set.end();
     const bool line_two_found = line_set.find(2) != line_set.end();
@@ -157,7 +157,7 @@ X0000000000X            X
 XXXXXXXXXXXXXXXXXXXXXXXXX
 )";
     Position pos {{3, 8}};
-    const std::set<int> rotation_lines = L.rotations[0].get_line_set();
+    const std::set<int> rotation_lines = pieces[0].rotations[0].get_line_set();
     std::set<int> completed_lines = get_completed_lines(rotation_lines, pos, play_field.substr(1));
     if (completed_lines.size() == 2
             and completed_lines.find(9) != completed_lines.end()

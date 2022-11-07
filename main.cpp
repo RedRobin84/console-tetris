@@ -3,6 +3,7 @@
 #include <chrono>
 #include <thread>
 #include <algorithm>
+#include <stdlib.h>
 
 const Point starting_position {TOP_CENTER};
 
@@ -26,34 +27,35 @@ int main() {
     timeout(0);            // no blocking on getch()
     curs_set(0);           // set the cursor to invisible
     Position current_pos {starting_position};
+    int current_piece_index = rand() % pieces.size();
     bool running = true;
     auto area {play_field.substr(1)};
     auto start = std::chrono::steady_clock::now();
 
     while(running) {
 	printw(area.c_str());
-	render(L, current_pos);
+	render(pieces[current_piece_index], current_pos);
 	refresh();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
     	switch (getch()) {
             case KEY_LEFT:
-		if (not collides(L.get_current_rotation(), current_pos.next_left(), area)) {
+		if (not collides(pieces[current_piece_index].get_current_rotation(), current_pos.next_left(), area)) {
 		    current_pos.move_left();
 		}
                 break;
             case KEY_RIGHT:
-		if (not collides(L.get_current_rotation(), current_pos.next_right(), area)) {
+		if (not collides(pieces[current_piece_index].get_current_rotation(), current_pos.next_right(), area)) {
 		    current_pos.move_right();
 		}
 	        break;
 	    case KEY_UP:
-		if (not collides(*L.next_rotation(), current_pos.get_coordinates(), area)) {
-		    L.current_rotation = L.next_rotation();
+		if (not collides(*pieces[current_piece_index].next_rotation(), current_pos.get_coordinates(), area)) {
+		    pieces[current_piece_index].current_rotation = pieces[current_piece_index].next_rotation();
 		}
 		break;
 	    case KEY_DOWN:
-		if (not collides(*L.previous_rotation(), current_pos.get_coordinates(), area)) {
-		    L.current_rotation = L.previous_rotation();
+		if (not collides(*pieces[current_piece_index].previous_rotation(), current_pos.get_coordinates(), area)) {
+		    pieces[current_piece_index].current_rotation = pieces[current_piece_index].previous_rotation();
 		}
 		break;
 	    case 'q':
@@ -61,14 +63,15 @@ int main() {
 		continue;
 	}
 	if (since(start).count() > 1000) {
-	    if (collides(L.get_current_rotation(), current_pos.next_down(), area)) {
-	        update_area(L.current_rotation, current_pos.get_coordinates(), area);
-		auto completed_lines = get_completed_lines(L.current_rotation->get_line_set(), current_pos, area);
+	    if (collides(pieces[current_piece_index].get_current_rotation(), current_pos.next_down(), area)) {
+	        update_area(pieces[current_piece_index].current_rotation, current_pos.get_coordinates(), area);
+		auto completed_lines = get_completed_lines(pieces[current_piece_index].current_rotation->get_line_set(), current_pos, area);
 		if (not completed_lines.empty()) {
 		    rebuild_area_with_non_completed_lines(area, completed_lines);
 		}
 		current_pos = {starting_position};
-		if (collides(L.get_current_rotation(), current_pos.get_coordinates(), area)) {
+                current_piece_index = rand() % pieces.size();
+		if (collides(pieces[current_piece_index].get_current_rotation(), current_pos.get_coordinates(), area)) {
 			running = false;
 		}
 	    } else {
