@@ -1,6 +1,7 @@
 #pragma once
 #include "point.hpp"
 #include <array>
+#include <set>
 
 const int PIECE_POINT_NUMBER = 4;
 

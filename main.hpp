@@ -4,10 +4,8 @@
 #include "point.hpp"
 
 #include <string>
-#include <compare>
 #include <iterator>
-#include <set>
-
+#include <algorithm>
 
 
 const std::string play_field = R"(
