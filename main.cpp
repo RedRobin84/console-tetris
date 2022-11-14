@@ -1,4 +1,5 @@
 #include "main.hpp"
+#include "score.hpp"
 #include <ncurses.h>
 #include <chrono>
 #include <thread>
@@ -19,6 +20,10 @@ const void render(const Piece& piece, const Position& pos) {
         });
 }
 
+const void render_score(const std::string& new_score) {
+	mvprintw(SCORE_POS.y, SCORE_POS.x, new_score.c_str());
+}
+
 int main() {
     initscr();
     cbreak();              // pass key presses to program, but not signals
@@ -31,10 +36,12 @@ int main() {
     bool running = true;
     auto area {play_field.substr(1)};
     auto start = std::chrono::steady_clock::now();
+    Score score {};
 
     while(running) {
 	printw(area.c_str());
 	render(pieces[current_piece_index], current_pos);
+	render_score(score.get_score());
 	refresh();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
     	switch (getch()) {
@@ -67,6 +74,7 @@ int main() {
 	        update_area(pieces[current_piece_index].current_rotation, current_pos.get_coordinates(), area);
 		auto completed_lines = get_completed_lines(pieces[current_piece_index].current_rotation->get_line_set(), current_pos, area);
 		if (not completed_lines.empty()) {
+		    score.update_based_on(completed_lines.size());
 		    rebuild_area_with_non_completed_lines(area, completed_lines);
 		}
 		current_pos = {starting_position};
