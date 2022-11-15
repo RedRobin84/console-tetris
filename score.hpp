@@ -31,3 +31,4 @@ class Score {
 	    score_to_display = std::to_string(score);
 	}
 };
+
