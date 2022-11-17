@@ -61,8 +61,9 @@ int main() {
 		}
 		break;
 	    case KEY_DOWN:
-		if (not collides(*pieces[current_piece_index].previous_rotation(), current_pos.get_coordinates(), area)) {
-		    pieces[current_piece_index].current_rotation = pieces[current_piece_index].previous_rotation();
+		if (not collides(pieces[current_piece_index].get_current_rotation(), current_pos.next_down(), area)) {
+	            current_pos = current_pos.next_down();
+		    start = std::chrono::steady_clock::now();
 		}
 		break;
 	    case 'q':
@@ -85,11 +86,6 @@ int main() {
 	    } else {
 	        current_pos = current_pos.next_down();
 	    }
-	//if current rotation collides with next down position
-	//write current rotation to current position in area
-	//check for completed rows, if present, delete them and then merge not completed ones
-	//create new Piece - if piece collides on creation - running false
-	//else current_pos = next down position
 		start = std::chrono::steady_clock::now();
 	}
 	clear();
