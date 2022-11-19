@@ -24,6 +24,10 @@ const void render_score(const std::string& new_score) {
 	mvprintw(SCORE_POS.y, SCORE_POS.x, new_score.c_str());
 }
 
+constexpr int STARTING_DROP_INTERVAL_MS {1000};
+constexpr int AFTER_DROP_DECREMENT_MS {5};
+constexpr int MIN_DROP_INTERVAL_LIMIT_MS {300};
+
 int main() {
     initscr();
     cbreak();              // pass key presses to program, but not signals
@@ -33,6 +37,7 @@ int main() {
     curs_set(0);           // set the cursor to invisible
     Position current_pos {starting_position};
     int current_piece_index = rand() % pieces.size();
+    int drop_interval {STARTING_DROP_INTERVAL_MS};
     bool running = true;
     auto area {play_field.substr(1)};
     auto start = std::chrono::steady_clock::now();
@@ -70,7 +75,7 @@ int main() {
 		running = false;
 		continue;
 	}
-	if (since(start).count() > 1000) {
+	if (since(start).count() > drop_interval) {
 	    if (collides(pieces[current_piece_index].get_current_rotation(), current_pos.next_down(), area)) {
 	        update_area(pieces[current_piece_index].current_rotation, current_pos.get_coordinates(), area);
 		auto completed_lines = get_completed_lines(pieces[current_piece_index].current_rotation->get_line_set(), current_pos, area);
@@ -83,10 +88,13 @@ int main() {
 		if (collides(pieces[current_piece_index].get_current_rotation(), current_pos.get_coordinates(), area)) {
 			running = false;
 		}
+	        if (drop_interval > MIN_DROP_INTERVAL_LIMIT_MS) {
+	            drop_interval -= AFTER_DROP_DECREMENT_MS;
+	        }
 	    } else {
 	        current_pos = current_pos.next_down();
 	    }
-		start = std::chrono::steady_clock::now();
+	    start = std::chrono::steady_clock::now();
 	}
 	clear();
     }
