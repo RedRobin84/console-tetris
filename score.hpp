@@ -12,6 +12,10 @@ class Score {
 	int score = DEFAULT_SCORE;
 	std::string score_to_display = std::to_string(DEFAULT_SCORE);
     public:
+	Score() = default;
+	Score(const std::string& t_score) : score{std::stoi(t_score)},
+			                    score_to_display{t_score} {};
+
 	inline const std::string& get_score() {
 	    return score_to_display;
 	}
