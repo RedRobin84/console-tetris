@@ -26,11 +26,11 @@ void when_move_left_to_illegal_position__then_keep_position() {
     printf("when_move_left_to_illegal_position__then_keep_position: ");
     Position top_left_position {UPPER_LEFT_BORDER};
     top_left_position.move_left();
-    if (top_left_position.get_x() == 0 && top_left_position.get_y() == 1) {
+    if (top_left_position.get_x() == -1 && top_left_position.get_y() == 1) {
 	printf("PASSED.\n");
 	return;
     }
-    printf("FAILED. Assertion failed.\n");
+    printf("FAILED. Position X should be -1 and was %d. Position Y should be 1 and was %d\n", top_left_position.get_x(), top_left_position.get_y());
 }
 
 int main() {
