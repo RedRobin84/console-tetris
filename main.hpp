@@ -13,7 +13,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXX
 X          X    Score   X
 X          X            X
 X          X            X
-X          X            X
+X          X  Top score X
 X          X            X
 X          X            X
 X          X            X
