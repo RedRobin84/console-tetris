@@ -55,7 +55,8 @@ X          X            X
 X          X            X
 XXXXXXXXXXXXXXXXXXXXXXXXX
 )";
-    auto third_line_begin = get_nth_line_begin(3, play_field.substr(1));
+    const auto play_field_sub = play_field.substr(1);
+    auto third_line_begin = get_nth_line_begin(3, play_field_sub);
     if (*third_line_begin == 'T') {
         printf("PASSED. \n");
         return;
@@ -80,7 +81,8 @@ X          X            X
 X          X            X
 XXXXXXXXXXXXXXXXXXXXXXXXX
 )";
-    const auto first_line_begin = get_nth_line_begin(1, play_field.substr(1));
+    const auto play_field_sub = play_field.substr(1);
+    const auto first_line_begin = get_nth_line_begin(1, play_field_sub);
     const auto first_line_end = get_nth_line_end(first_line_begin);
     if (*first_line_end == 'X' and *(first_line_end - 1) == 'T') {
         printf("PASSED.\n");
@@ -106,7 +108,8 @@ X          X            X
 X0000000000X            X
 XXXXXXXXXXXXXXXXXXXXXXXXX
 )";
-    const bool line_completed = is_line_completed(10, play_field.substr(1));
+    const auto play_field_sub = play_field.substr(1);
+    const bool line_completed = is_line_completed(10, play_field_sub);
     if (line_completed) {
         printf("PASSED.\n");
         return;

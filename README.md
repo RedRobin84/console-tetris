@@ -8,4 +8,7 @@ Keybinding:
 * down key to speed up the dropdown
 * press 'q' to quit.
 
+Features:
+* Score is saved, if it beats the previous one.
+
 Run in console by typing *./main* in the folder, where is the program located.

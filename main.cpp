@@ -1,5 +1,7 @@
 #include "main.hpp"
 #include "score.hpp"
+#include "file_ops.hpp"
+
 #include <ncurses.h>
 #include <chrono>
 #include <thread>
@@ -20,13 +22,17 @@ const void render(const Piece& piece, const Position& pos) {
         });
 }
 
-const void render_score(const std::string& new_score) {
-	mvprintw(SCORE_POS.y, SCORE_POS.x, new_score.c_str());
+const void render_score(const std::string& new_score, const Point& pos) {
+	mvprintw(pos.y, pos.x, new_score.c_str());
 }
 
 constexpr int STARTING_DROP_INTERVAL_MS {1000};
 constexpr int AFTER_DROP_DECREMENT_MS {5};
 constexpr int MIN_DROP_INTERVAL_LIMIT_MS {300};
+
+constexpr const char *SCORE_FILE = "data.bin";
+const Point SCORE_POS {18, 2};
+const Point PREV_SCORE_POS {18, 5};
 
 int main() {
     initscr();
@@ -41,12 +47,17 @@ int main() {
     bool running = true;
     auto area {play_field.substr(1)};
     auto start = std::chrono::steady_clock::now();
+    const Score previous_score = Score(
+	read_score_from_binary_file(SCORE_FILE)
+	.value_or(0)
+	);
     Score score {};
 
     while(running) {
 	printw(area.c_str());
 	render(pieces[current_piece_index], current_pos);
-	render_score(score.get_score());
+	render_score(score.get_score(), SCORE_POS);
+	render_score(previous_score.get_score(), PREV_SCORE_POS);
 	refresh();
 	std::this_thread::sleep_for(std::chrono::milliseconds(10));
     	switch (getch()) {
@@ -98,7 +109,9 @@ int main() {
 	}
 	clear();
     }
-
+    if (score.get_score_as_int() > previous_score.get_score_as_int()) {
+	write_score_to_binary_file(score.get_score_as_int(), SCORE_FILE);
+    }
     endwin();
     return 0;
 }
