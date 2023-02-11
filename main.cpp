@@ -11,7 +11,7 @@
 const Point starting_position {TOP_CENTER};
 
 void draw_on_pos(const Point& point) {
-	mvprintw(point.y, point.x, DEFAULT_CHAR);
+	mvprintw(point.y, point.x, "%s", DEFAULT_CHAR);
 }
 
 const void render(const Piece& piece, const Position& pos) {
@@ -23,7 +23,7 @@ const void render(const Piece& piece, const Position& pos) {
 }
 
 const void render_score(const std::string& new_score, const Point& pos) {
-	mvprintw(pos.y, pos.x, new_score.c_str());
+	mvprintw(pos.y, pos.x, "%s", new_score.c_str());
 }
 
 constexpr int STARTING_DROP_INTERVAL_MS {1000};
@@ -54,12 +54,12 @@ int main() {
     Score score {};
 
     while(running) {
-	printw(area.c_str());
+	printw( "%s", area.c_str());
 	render(pieces[current_piece_index], current_pos);
 	render_score(score.get_score(), SCORE_POS);
 	render_score(previous_score.get_score(), PREV_SCORE_POS);
 	refresh();
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
     	switch (getch()) {
             case KEY_LEFT:
 		if (not collides(pieces[current_piece_index].get_current_rotation(), current_pos.next_left(), area)) {

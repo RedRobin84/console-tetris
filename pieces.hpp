@@ -10,7 +10,7 @@
  * Z
  * S
 */
-const size_t NR_OF_PIECES = 7;
+const std::size_t NR_OF_PIECES = 7;
 
 std::array<Piece, NR_OF_PIECES> pieces {
 	Piece{

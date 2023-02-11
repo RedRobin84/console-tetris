@@ -11,10 +11,9 @@ struct Rotation
 
 	std::set<int> get_line_set() const {
 	    std::set<int> lines;
-	    std::for_each(coordinates.cbegin(), coordinates.cend(),
-		[&lines](const Point& p) {
-		lines.insert(p.y);
-		});
+	    for (const auto& point : coordinates) {
+		lines.insert(point.y);
+	    }
 	    return lines;
 	}
 };
